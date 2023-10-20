@@ -48,16 +48,28 @@ services:
     volumes:
       - redis:/data
 
+  # db:
+  #   env_file: docker/.env
+  #   image: postgres:15
+  #   container_name: superset_db
+  #   restart: unless-stopped
+  #   ports:
+  #     - "127.0.0.1:5432:5432"
+  #   volumes:
+  #     - db_home:/var/lib/postgresql/data
+  #     - ./docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
   db:
     env_file: docker/.env
-    image: postgres:15
+    image: mysql:5.7
     container_name: superset_db
     restart: unless-stopped
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:3306:3306"
     volumes:
-      - db_home:/var/lib/postgresql/data
+      - db_home:/var/lib/mysql
       - ./docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./docker/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf:ro
 
   superset:
     env_file: docker/.env

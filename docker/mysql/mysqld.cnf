@@ -1,0 +1,12 @@
+[global]
+innodb_file_format=Barracuda
+
+[mysqld]
+bind-address=0.0.0.0
+character-set-server=utf8mb4
+collation-server=utf8mb4_general_ci
+innodb_strict_mode=0
+innodb_file_per_table = 1
+
+[client]
+default-character-set=utf8mb4
