@@ -21,10 +21,7 @@ import subprocess
 from setuptools import find_packages, setup
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-PACKAGE_JSON = os.path.join(BASE_DIR, "superset-frontend", "package.json")
-
-with open(PACKAGE_JSON) as package_file:
-    version_string = json.load(package_file)["version"]
+version_string = "0.0.0-dev"
 
 with open("README.md", encoding="utf-8") as f:
     long_description = f.read()
