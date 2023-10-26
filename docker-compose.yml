@@ -179,6 +179,14 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "celery inspect ping -A superset.tasks.celery_app:app -d celery@$$HOSTNAME"]
 
+  redshift:
+    env_file: docker/.env
+    image: guildeducation/docker-amazon-redshift
+    container_name: jinjer-dashboard-be_redshift
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5439:5439"
+
 volumes:
   superset_home:
     external: false
