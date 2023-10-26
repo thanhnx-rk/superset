@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-x-superset-image: &superset-image jinjer/jinjer-dashboard-be:${TAG:-latest-dev}
+x-superset-image: &superset-image apachesuperset.docker.scarf.sh/apache/superset:${TAG:-latest-dev}
 x-superset-depends-on: &superset-depends-on
   - db
   - redis
@@ -22,38 +22,29 @@ x-superset-volumes:
   &superset-volumes # /app/pythonpath_docker will be appended to the PYTHONPATH in the final container
   - ./docker:/app/docker
   - superset_home:/app/superset_home
-x-superset-build: &superset-build
-  image: *superset-image
-  args:
-    NPM_BUILD_CMD: build
-  context: ./
-  dockerfile: Dockerfile
 
 version: "3.7"
 services:
   redis:
     image: redis:7
-    container_name: jinjer-dashboard-be_cache
+    container_name: superset_cache
     restart: unless-stopped
     volumes:
       - redis:/data
 
   db:
     env_file: docker/.env-non-dev
-    image: mysql:5.7
-    container_name: jinjer-dashboard-be_db
+    image: postgres:15
+    container_name: superset_db
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:3306:3306"
     volumes:
-      - db_home:/var/lib/mysql
+      - db_home:/var/lib/postgresql/data
       - ./docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - ./docker/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf:ro
 
   superset:
     env_file: docker/.env-non-dev
-    build: *superset-build
-    container_name: jinjer-dashboard-be_app
+    image: *superset-image
+    container_name: superset_app
     command: ["/app/docker/docker-bootstrap.sh", "app-gunicorn"]
     user: "root"
     restart: unless-stopped
@@ -63,8 +54,8 @@ services:
     volumes: *superset-volumes
 
   superset-init:
-    build: *superset-build
-    container_name: jinjer-dashboard-be_init
+    image: *superset-image
+    container_name: superset_init
     command: ["/app/docker/docker-init.sh"]
     env_file: docker/.env-non-dev
     depends_on: *superset-depends-on
@@ -74,8 +65,8 @@ services:
       disable: true
 
   superset-worker:
-    build: *superset-build
-    container_name: jinjer-dashboard-be_worker
+    image: *superset-image
+    container_name: superset_worker
     command: ["/app/docker/docker-bootstrap.sh", "worker"]
     env_file: docker/.env-non-dev
     restart: unless-stopped
@@ -90,8 +81,8 @@ services:
         ]
 
   superset-worker-beat:
-    build: *superset-build
-    container_name: jinjer-dashboard-be_worker_beat
+    image: *superset-image
+    container_name: superset_worker_beat
     command: ["/app/docker/docker-bootstrap.sh", "beat"]
     env_file: docker/.env-non-dev
     restart: unless-stopped

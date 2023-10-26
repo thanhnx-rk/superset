@@ -360,5 +360,8 @@ xlsxwriter==3.0.7
 zipp==3.15.0
     # via importlib-metadata
 
+# Main BI database of Jinjer-Dashboard
+sqlalchemy-redshift==0.8.14
+
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
