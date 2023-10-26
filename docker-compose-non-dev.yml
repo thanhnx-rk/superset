@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-x-superset-image: &superset-image apachesuperset.docker.scarf.sh/apache/superset:${TAG:-latest-dev}
 x-superset-depends-on: &superset-depends-on
   - db
   - redis
@@ -27,7 +26,7 @@ version: "3.7"
 services:
   redis:
     image: redis:7
-    container_name: superset_cache
+    container_name: jinjer-dashboard-be_cache
     restart: unless-stopped
     volumes:
       - redis:/data
@@ -35,7 +34,7 @@ services:
   db:
     env_file: docker/.env-non-dev
     image: postgres:15
-    container_name: superset_db
+    container_name: jinjer-dashboard-be_db
     restart: unless-stopped
     volumes:
       - db_home:/var/lib/postgresql/data
@@ -43,8 +42,9 @@ services:
 
   superset:
     env_file: docker/.env-non-dev
-    image: *superset-image
-    container_name: superset_app
+    image: jinjer-backend
+    container_name: jinjer-dashboard-be_app
+    build: ./
     command: ["/app/docker/docker-bootstrap.sh", "app-gunicorn"]
     user: "root"
     restart: unless-stopped
@@ -54,8 +54,8 @@ services:
     volumes: *superset-volumes
 
   superset-init:
-    image: *superset-image
-    container_name: superset_init
+    image: jinjer-backend
+    container_name: jinjer-dashboard-be_init
     command: ["/app/docker/docker-init.sh"]
     env_file: docker/.env-non-dev
     depends_on: *superset-depends-on
@@ -65,8 +65,8 @@ services:
       disable: true
 
   superset-worker:
-    image: *superset-image
-    container_name: superset_worker
+    image: jinjer-backend
+    container_name: jinjer-dashboard-be_worker
     command: ["/app/docker/docker-bootstrap.sh", "worker"]
     env_file: docker/.env-non-dev
     restart: unless-stopped
@@ -81,8 +81,8 @@ services:
         ]
 
   superset-worker-beat:
-    image: *superset-image
-    container_name: superset_worker_beat
+    image: jinjer-backend
+    container_name: jinjer-dashboard-be_worker_beat
     command: ["/app/docker/docker-bootstrap.sh", "beat"]
     env_file: docker/.env-non-dev
     restart: unless-stopped
