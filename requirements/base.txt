@@ -362,6 +362,7 @@ zipp==3.15.0
 
 # Main BI database of Jinjer-Dashboard
 sqlalchemy-redshift==0.8.14
+redshift-connector==2.0.915
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

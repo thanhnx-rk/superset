@@ -489,3 +489,4 @@ xlrd==2.0.1
 
 # Main BI database of Jinjer-Dashboard
 sqlalchemy-redshift==0.8.14
+redshift-connector==2.0.915
