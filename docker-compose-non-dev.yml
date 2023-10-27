@@ -23,7 +23,6 @@ x-superset-volumes:
   - ./docker:/app/docker
   - superset_home:/app/superset_home
 x-superset-build: &superset-build
-  image: *superset-image
   args:
     NPM_BUILD_CMD: build
   context: ./
@@ -53,6 +52,7 @@ services:
   superset:
     env_file: docker/.env-non-dev
     build: *superset-build
+    image: *superset-image
     container_name: jinjer-dashboard-be_app
     command: ["/app/docker/docker-bootstrap.sh", "app-gunicorn"]
     user: "root"
@@ -64,6 +64,7 @@ services:
 
   superset-init:
     build: *superset-build
+    image: *superset-image
     container_name: jinjer-dashboard-be_init
     command: ["/app/docker/docker-init.sh"]
     env_file: docker/.env-non-dev
@@ -75,6 +76,7 @@ services:
 
   superset-worker:
     build: *superset-build
+    image: *superset-image
     container_name: jinjer-dashboard-be_worker
     command: ["/app/docker/docker-bootstrap.sh", "worker"]
     env_file: docker/.env-non-dev
@@ -91,6 +93,7 @@ services:
 
   superset-worker-beat:
     build: *superset-build
+    image: *superset-image
     container_name: jinjer-dashboard-be_worker_beat
     command: ["/app/docker/docker-bootstrap.sh", "beat"]
     env_file: docker/.env-non-dev
