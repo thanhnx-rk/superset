@@ -25,12 +25,12 @@ from flask import g
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 
 from superset import is_feature_enabled, security_manager
-from superset.daos.base import BaseDAO
-from superset.dashboards.commands.exceptions import (
+from superset.commands.dashboard.exceptions import (
     DashboardAccessDeniedError,
     DashboardForbiddenError,
     DashboardNotFoundError,
 )
+from superset.daos.base import BaseDAO
 from superset.dashboards.filter_sets.consts import (
     DASHBOARD_ID_FIELD,
     DESCRIPTION_FIELD,
@@ -177,15 +177,6 @@ class DashboardDAO(BaseDAO[Dashboard]):
             )
             return not db.session.query(dashboard_query.exists()).scalar()
         return True
-
-    @staticmethod
-    def update_charts_owners(model: Dashboard, commit: bool = True) -> Dashboard:
-        owners = list(model.owners)
-        for slc in model.slices:
-            slc.owners = list(set(owners) | set(slc.owners))
-        if commit:
-            db.session.commit()
-        return model
 
     @staticmethod
     def set_dash_metadata(  # pylint: disable=too-many-locals
