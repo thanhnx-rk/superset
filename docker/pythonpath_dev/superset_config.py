@@ -71,6 +71,7 @@ CACHE_CONFIG = {
 }
 DATA_CACHE_CONFIG = CACHE_CONFIG
 
+RATELIMIT_STORAGE_URI = os.getenv("RATELIMIT_STORAGE_URI", None)
 
 class CeleryConfig:
     broker_url = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_CELERY_DB}"
@@ -99,6 +100,9 @@ WEBDRIVER_BASEURL = "http://superset:8088/"
 WEBDRIVER_BASEURL_USER_FRIENDLY = WEBDRIVER_BASEURL
 
 SQLLAB_CTAS_NO_LIMIT = True
+
+GLOBAL_ASYNC_QUERIES_JWT_SECRET = os.getenv("GLOBAL_ASYNC_QUERIES_JWT_SECRET", "test-secret-change-me")
+GLOBAL_ASYNC_QUERIES_WEBSOCKET_URL = os.getenv("GLOBAL_ASYNC_QUERIES_WEBSOCKET_URL", "ws://127.0.0.1:8080/")
 
 #
 # Optionally import superset_config_docker.py (which will have been included on
