@@ -243,7 +243,7 @@ prison==0.2.1
     # via flask-appbuilder
 prompt-toolkit==3.0.38
     # via click-repl
-pyarrow==12.0.0
+pyarrow==14.0.1
     # via apache-superset
 pycparser==2.20
     # via cffi
@@ -362,6 +362,7 @@ werkzeug==2.3.3
     # via
     #   apache-superset
     #   flask
+    #   flask-appbuilder
     #   flask-jwt-extended
     #   flask-login
 wrapt==1.15.0
@@ -380,7 +381,6 @@ zipp==3.15.0
     # via
     #   importlib-metadata
     #   importlib-resources
-
 appnope==0.1.3
     # via ipython
 astroid==2.15.8
@@ -507,6 +507,18 @@ unicodecsv==0.14.1
 xlrd==2.0.1
     # via tabulator
 
+gevent==22.10.2
+    # via -r requirements/docker.in
+psycopg2-binary==2.9.6
+    # via apache-superset
+zope-event==4.5.0
+    # via gevent
+zope-interface==5.4.0
+    # via gevent
+
 # Main BI database of Jinjer-Dashboard
 sqlalchemy-redshift==0.8.14
 redshift-connector==2.0.915
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
